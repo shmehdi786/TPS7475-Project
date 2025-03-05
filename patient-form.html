@@ -1,0 +1,190 @@
+<!-- 
+    Program name: patient-form.html
+    Author: Hijab Mehdi
+    Date created: 02/08/2025
+    Date last edited: 02/10/2025
+    Version: 1.0
+    Description: This file contains a patient registration form with basic validation.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Patient Registration Form</title>
+  <!-- Link to external CSS -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Inline JavaScript to display the current day/date -->
+  <script>
+    function showCurrentDate() {
+      const today = new Date();
+      const options = { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'short', 
+        day: 'numeric' 
+      };
+      document.getElementById("currentDate").textContent = today.toLocaleDateString('en-US', options);
+    }
+  </script>
+</head>
+<body onload="showCurrentDate()">
+
+<!-- HEADER/BANNER SECTION -->
+<div class="header-banner">
+  <img src="magicalmedicalcenter.jpg" alt="Company Logo" width="50" height="50">
+  <h1>Magical Medical Center</h1>
+  <p>Today is: <span id="currentDate"></span></p>
+</div>
+
+<hr>
+
+<!-- MAIN FORM SECTION -->
+<div class="main-section">
+  <h2>Patient Registration Form</h2>
+  
+  <form action="thankyou.html">
+    <table>
+      <!-- First / Middle / Last Name -->
+      <tr>
+        <td><label for="firstName">First Name:</label></td>
+        <td><input type="text" id="firstName" name="firstName" maxlength="30" required></td>
+        <td><label for="middleInitial">MI:</label></td>
+        <td><input type="text" id="middleInitial" name="middleInitial" maxlength="1"></td>
+        <td><label for="lastName">Last Name:</label></td>
+        <td><input type="text" id="lastName" name="lastName" maxlength="30" required></td>
+      </tr>
+
+      <!-- Date of Birth and Social Security -->
+      <tr>
+        <td><label for="dob">Date of Birth (MM/DD/YYYY):</label></td>
+        <td><input type="text" id="dob" name="dob" placeholder="MM/DD/YYYY" pattern="^(0[1-9]|1[0-2])/(0[1-9]|[12]\d|3[01])/\d{4}$" required></td>
+        <td><label for="ssn">Social Security #:</label></td>
+        <td><input type="password" id="ssn" name="ssn" maxlength="11" pattern="^\d{9,11}$" placeholder="9-11 digits" required></td>
+      </tr>
+
+      <!-- Address Fields -->
+      <tr>
+        <td><label for="address1">Address Line 1:</label></td>
+        <td colspan="3"><input type="text" id="address1" name="address1" maxlength="30" required></td>
+      </tr>
+      <tr>
+        <td><label for="address2">Address Line 2:</label></td>
+        <td colspan="3"><input type="text" id="address2" name="address2" maxlength="30"></td>
+      </tr>
+
+      <!-- City / State / Zip -->
+      <tr>
+        <td><label for="city">City:</label></td>
+        <td><input type="text" id="city" name="city" maxlength="30" required></td>
+        <td><label for="state">State:</label></td>
+        <td>
+          <select id="state" name="state" required>
+            <option value="">--Select--</option>
+            <option value="AL">AL</option>
+            <option value="AK">AK</option>
+            <option value="AZ">AZ</option>
+            <option value="CA">CA</option>
+            <option value="NY">NY</option>
+            <option value="TX">TX</option>
+            <option value="WA">WA</option>
+            <option value="DC">DC</option>
+            <option value="PR">PR</option>
+            <!-- Not sure how to add states without listing all of them, so stopping here -->
+          </select>
+        </td>
+        <td><label for="zip">Zip:</label></td>
+        <!-- had to look up how to use regular expressions to get this to work properly -->
+        <td><input type="text" id="zip" name="zip" maxlength="10" pattern="^\d{5}(-\d{4})?$" placeholder="5 or 9 digits" required></td>
+      </tr>
+
+      <!-- Email Address -->
+      <tr>
+        <td><label for="email">Email:</label></td>
+        <td colspan="5"><input type="email" id="email" name="email" required></td>
+      </tr>
+
+       <!-- Gender Selection -->
+       <tr>
+        <td colspan="6">
+          <p>Gender:</p>
+          <input type="radio" id="genderMale" name="gender" value="Male">
+          <label for="genderMale">Male</label>
+          <input type="radio" id="genderFemale" name="gender" value="Female">
+          <label for="genderFemale">Female</label>
+          <input type="radio" id="genderOther" name="gender" value="Other">
+          <label for="genderOther">Other</label>
+        </td>
+      </tr>
+
+      <!-- Health Scale (1-10) -->
+      <tr>
+        <td><label for="healthScale">Health Scale (1-10):</label></td>
+        <td colspan="5">
+          <input type="range" id="healthScale" name="healthScale" min="1" max="10" value="5">
+        </td>
+      </tr>
+
+      <!-- Vaccination Status -->
+      <tr>
+        <td colspan="6">
+          <p>Have you been vaccinated?</p>
+          <input type="radio" id="vaxYes" name="vaccinated" value="Yes">
+          <label for="vaxYes">Yes</label>
+          <input type="radio" id="vaxNo" name="vaccinated" value="No">
+          <label for="vaxNo">No</label>
+        </td>
+      </tr>
+
+      <!-- Insurance Status -->
+      <tr>
+        <td colspan="6">
+          <p>Do you have insurance?</p>
+          <input type="radio" id="insYes" name="insurance" value="Yes">
+          <label for="insYes">Yes</label>
+          <input type="radio" id="insNo" name="insurance" value="No">
+          <label for="insNo">No</label>
+        </td>
+      </tr>
+
+      <!-- Checkboxes -->
+      <tr>
+        <td colspan="6">
+          <p>Check all that apply (Medical History):</p>
+          <input type="checkbox" id="chickenPox" name="history" value="ChickenPox">
+          <label for="chickenPox">Chicken Pox</label>
+          <input type="checkbox" id="measles" name="history" value="Measles">
+          <label for="measles">Measles</label>
+          <input type="checkbox" id="covid" name="history" value="Covid-19">
+          <label for="covid">Covid-19</label>
+          <input type="checkbox" id="smallPox" name="history" value="SmallPox">
+          <label for="smallPox">Small Pox</label>
+          <input type="checkbox" id="tetanus" name="history" value="Tetanus">
+          <label for="tetanus">Tetanus</label>
+        </td>
+      </tr>
+
+      <!-- Form Buttons -->
+      <tr>
+        <td colspan="6" style="text-align: center;">
+          <input type="reset" value="CLEAR AND START OVER">
+          <input type="submit" value="Submit">
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>
+
+<hr>
+
+<!-- FOOTER SECTION -->
+<div class="footer-section">
+  <p>Magical Medical Center | <button onclick="alert('Contact us at 1-800-555-1234 or email contact@magicalmedicalcenter.com');">Contact Us</button> | 
+    <a href="https://facebook.com" target="_blank">Facebook</a> 
+    <a href="https://twitter.com" target="_blank">Twitter</a>
+  </p>
+  <p>PO BOX 18881, Sugar Land, TX 77496</p>
+</div>
+
+</body>
+</html>
