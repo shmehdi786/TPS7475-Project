@@ -3,8 +3,9 @@
     Author: Hijab Mehdi
     Date created: 02/08/2025
     Date last edited: 02/10/2025
-    Version: 1.0
-    Description: This file contains a patient registration form with basic validation.
+    Version: 2.0
+    Description: This file contains a patient registration form with advanced validation,
+                 dynamic review, and additional fields per assignment requirements.
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -27,164 +28,323 @@
       document.getElementById("currentDate").textContent = today.toLocaleDateString('en-US', options);
     }
   </script>
+
+  <!-- Link to external JS for review functionality and password validation -->
+  <script src="formReview.js"></script>
 </head>
 <body onload="showCurrentDate()">
 
-<!-- HEADER/BANNER SECTION -->
-<div class="header-banner">
-  <img src="magicalmedicalcenter.jpg" alt="Company Logo" width="50" height="50">
-  <h1>Magical Medical Center</h1>
-  <p>Today is: <span id="currentDate"></span></p>
-</div>
+  <!-- HEADER/BANNER SECTION -->
+  <div class="header-banner">
+    <img src="magicalmedicalcenter.jpg" alt="Company Logo" width="50" height="50">
+    <h1>Magical Medical Center</h1>
+    <p>Today is: <span id="currentDate"></span></p>
+  </div>
 
-<hr>
+  <hr>
 
-<!-- MAIN FORM SECTION -->
-<div class="main-section">
-  <h2>Patient Registration Form</h2>
-  
-  <form action="thankyou.html">
-    <table>
-      <!-- First / Middle / Last Name -->
-      <tr>
-        <td><label for="firstName">First Name:</label></td>
-        <td><input type="text" id="firstName" name="firstName" maxlength="30" required></td>
-        <td><label for="middleInitial">MI:</label></td>
-        <td><input type="text" id="middleInitial" name="middleInitial" maxlength="1"></td>
-        <td><label for="lastName">Last Name:</label></td>
-        <td><input type="text" id="lastName" name="lastName" maxlength="30" required></td>
-      </tr>
+  <!-- MAIN FORM SECTION -->
+  <div class="main-section">
+    <h2>Patient Registration Form</h2>
+    
+    <form action="thankyou.html">
+      <table>
+        <!-- Block/Area 1: Name and Date of Birth -->
+        <tr>
+          <td><label for="firstName">First Name:</label></td>
+          <td>
+            <input type="text" id="firstName" name="firstName" maxlength="30" 
+                   pattern="^[A-Za-z'\-]{1,30}$" 
+                   title="1-30 characters: letters, apostrophes, and dashes only" 
+                   required>
+          </td>
+          <td><label for="middleInitial">MI:</label></td>
+          <td>
+            <input type="text" id="middleInitial" name="middleInitial" maxlength="1" 
+                   pattern="^[A-Za-z]?$" 
+                   title="Optional: a single letter only">
+          </td>
+          <td><label for="lastName">Last Name:</label></td>
+          <td>
+            <input type="text" id="lastName" name="lastName" maxlength="30" 
+                   pattern="^[A-Za-z0-9'\-]{1,30}$" 
+                   title="1-30 characters: letters, numbers, apostrophes, and dashes only" 
+                   required>
+          </td>
+        </tr>
+        <tr>
+          <td><label for="dob">Date of Birth:</label></td>
+          <td>
+            <!-- Using type=date for built-in validation; min/max values are hard coded -->
+            <input type="date" id="dob" name="dob" 
+                   min="1905-01-01" max="2025-02-09" 
+                   title="Enter your birthdate (cannot be in the future or more than 120 years ago)" 
+                   required>
+          </td>
+          <td><label for="ssn">Social Security #:</label></td>
+          <td>
+            <input type="password" id="ssn" name="ssn" maxlength="11" 
+                   pattern="^\d{9,11}$" 
+                   placeholder="9-11 digits" 
+                   title="Enter 9 to 11 digits for your Social Security number" 
+                   required>
+          </td>
+          <!-- Extra cells to balance the row -->
+          <td></td>
+          <td></td>
+        </tr>
 
-      <!-- Date of Birth and Social Security -->
-      <tr>
-        <td><label for="dob">Date of Birth (MM/DD/YYYY):</label></td>
-        <td><input type="text" id="dob" name="dob" placeholder="MM/DD/YYYY" pattern="^(0[1-9]|1[0-2])/(0[1-9]|[12]\d|3[01])/\d{4}$" required></td>
-        <td><label for="ssn">Social Security #:</label></td>
-        <td><input type="password" id="ssn" name="ssn" maxlength="11" pattern="^\d{9,11}$" placeholder="9-11 digits" required></td>
-      </tr>
+        <!-- Block/Area 2: Address Information -->
+        <tr>
+          <td><label for="address1">Address Line 1:</label></td>
+          <td colspan="3">
+            <input type="text" id="address1" name="address1" maxlength="30" 
+                   pattern=".{2,30}" 
+                   title="Enter address (2-30 characters)" 
+                   required>
+          </td>
+        </tr>
+        <tr>
+          <td><label for="address2">Address Line 2:</label></td>
+          <td colspan="3">
+            <input type="text" id="address2" name="address2" maxlength="30" 
+                   pattern=".{2,30}" 
+                   title="If provided, enter address (2-30 characters)">
+          </td>
+        </tr>
+        <tr>
+          <td><label for="city">City:</label></td>
+          <td>
+            <input type="text" id="city" name="city" maxlength="30" 
+                   pattern=".{2,30}" 
+                   title="Enter city name (2-30 characters)" 
+                   required>
+          </td>
+          <td><label for="state">State:</label></td>
+          <td>
+            <select id="state" name="state" title="Select your state" required>
+              <option value="">--Select--</option>
+              <option value="AL">AL</option>
+              <option value="AK">AK</option>
+              <option value="AZ">AZ</option>
+              <option value="AR">AR</option>
+              <option value="CA">CA</option>
+              <option value="CO">CO</option>
+              <option value="CT">CT</option>
+              <option value="DE">DE</option>
+              <option value="FL">FL</option>
+              <option value="GA">GA</option>
+              <option value="HI">HI</option>
+              <option value="ID">ID</option>
+              <option value="IL">IL</option>
+              <option value="IN">IN</option>
+              <option value="IA">IA</option>
+              <option value="KS">KS</option>
+              <option value="KY">KY</option>
+              <option value="LA">LA</option>
+              <option value="ME">ME</option>
+              <option value="MD">MD</option>
+              <option value="MA">MA</option>
+              <option value="MI">MI</option>
+              <option value="MN">MN</option>
+              <option value="MS">MS</option>
+              <option value="MO">MO</option>
+              <option value="MT">MT</option>
+              <option value="NE">NE</option>
+              <option value="NV">NV</option>
+              <option value="NH">NH</option>
+              <option value="NJ">NJ</option>
+              <option value="NM">NM</option>
+              <option value="NY">NY</option>
+              <option value="NC">NC</option>
+              <option value="ND">ND</option>
+              <option value="OH">OH</option>
+              <option value="OK">OK</option>
+              <option value="OR">OR</option>
+              <option value="PA">PA</option>
+              <option value="RI">RI</option>
+              <option value="SC">SC</option>
+              <option value="SD">SD</option>
+              <option value="TN">TN</option>
+              <option value="TX">TX</option>
+              <option value="UT">UT</option>
+              <option value="VT">VT</option>
+              <option value="VA">VA</option>
+              <option value="WA">WA</option>
+              <option value="WV">WV</option>
+              <option value="WI">WI</option>
+              <option value="WY">WY</option>
+              <option value="DC">DC</option>
+              <option value="PR">PR</option>
+            </select>
+          </td>
+          <td><label for="zip">Zip:</label></td>
+          <td>
+            <input type="text" id="zip" name="zip" maxlength="10" 
+                   pattern="^\d{5}(-\d{4})?$" 
+                   placeholder="5 or 9 digits" 
+                   title="Enter a 5-digit ZIP or ZIP+4 (will be truncated to 5 digits)" 
+                   required>
+          </td>
+        </tr>
 
-      <!-- Address Fields -->
-      <tr>
-        <td><label for="address1">Address Line 1:</label></td>
-        <td colspan="3"><input type="text" id="address1" name="address1" maxlength="30" required></td>
-      </tr>
-      <tr>
-        <td><label for="address2">Address Line 2:</label></td>
-        <td colspan="3"><input type="text" id="address2" name="address2" maxlength="30"></td>
-      </tr>
+        <!-- Block/Area 3: Contact Information -->
+        <tr>
+          <td><label for="email">Email:</label></td>
+          <td colspan="5">
+            <input type="email" id="email" name="email" 
+                   title="Enter your email in the format name@domain.tld" 
+                   required>
+          </td>
+        </tr>
+        <tr>
+          <td><label for="phone">Phone Number:</label></td>
+          <td colspan="5">
+            <input type="tel" id="phone" name="phone" 
+                   pattern="^\d{3}-\d{3}-\d{4}$" 
+                   placeholder="000-000-0000" 
+                   title="Enter phone number as 000-000-0000" 
+                   required>
+          </td>
+        </tr>
 
-      <!-- City / State / Zip -->
-      <tr>
-        <td><label for="city">City:</label></td>
-        <td><input type="text" id="city" name="city" maxlength="30" required></td>
-        <td><label for="state">State:</label></td>
-        <td>
-          <select id="state" name="state" required>
-            <option value="">--Select--</option>
-            <option value="AL">AL</option>
-            <option value="AK">AK</option>
-            <option value="AZ">AZ</option>
-            <option value="CA">CA</option>
-            <option value="NY">NY</option>
-            <option value="TX">TX</option>
-            <option value="WA">WA</option>
-            <option value="DC">DC</option>
-            <option value="PR">PR</option>
-            <!-- Not sure how to add states without listing all of them, so stopping here -->
-          </select>
-        </td>
-        <td><label for="zip">Zip:</label></td>
-        <!-- had to look up how to use regular expressions to get this to work properly -->
-        <td><input type="text" id="zip" name="zip" maxlength="10" pattern="^\d{5}(-\d{4})?$" placeholder="5 or 9 digits" required></td>
-      </tr>
+        <!-- Block/Area 4: Additional Choices -->
+        <!-- Gender Selection (duplicate group; you can remove if redundant) -->
+        <tr>
+          <td colspan="6">
+            <p>Gender:</p>
+            <input type="radio" id="genderMale" name="gender" value="Male">
+            <label for="genderMale">Male</label>
+            <input type="radio" id="genderFemale" name="gender" value="Female">
+            <label for="genderFemale">Female</label>
+            <input type="radio" id="genderOther" name="gender" value="Other">
+            <label for="genderOther">Other</label>
+          </td>
+        </tr>
+        <!-- Health Scale -->
+        <tr>
+          <td><label for="healthScale">Health Scale (1-10):</label></td>
+          <td colspan="5">
+            <input type="range" id="healthScale" name="healthScale" min="1" max="10" value="5"
+                   title="Rate your health on a scale from 1 to 10">
+          </td>
+        </tr>
+        <!-- Vaccination Status -->
+        <tr>
+          <td colspan="6">
+            <p>Have you been vaccinated?</p>
+            <input type="radio" id="vaxYes" name="vaccinated" value="Yes">
+            <label for="vaxYes">Yes</label>
+            <input type="radio" id="vaxNo" name="vaccinated" value="No">
+            <label for="vaxNo">No</label>
+          </td>
+        </tr>
+        <!-- Insurance Status -->
+        <tr>
+          <td colspan="6">
+            <p>Do you have insurance?</p>
+            <input type="radio" id="insYes" name="insurance" value="Yes">
+            <label for="insYes">Yes</label>
+            <input type="radio" id="insNo" name="insurance" value="No">
+            <label for="insNo">No</label>
+          </td>
+        </tr>
+        <!-- Medical History Checkboxes -->
+        <tr>
+          <td colspan="6">
+            <p>Check all that apply (Medical History):</p>
+            <input type="checkbox" id="chickenPox" name="history" value="ChickenPox">
+            <label for="chickenPox">Chicken Pox</label>
+            <input type="checkbox" id="measles" name="history" value="Measles">
+            <label for="measles">Measles</label>
+            <input type="checkbox" id="covid" name="history" value="Covid-19">
+            <label for="covid">Covid-19</label>
+            <input type="checkbox" id="smallPox" name="history" value="SmallPox">
+            <label for="smallPox">Small Pox</label>
+            <input type="checkbox" id="tetanus" name="history" value="Tetanus">
+            <label for="tetanus">Tetanus</label>
+          </td>
+        </tr>
+        <!-- Desired Salary Slider -->
+        <tr>
+          <td><label for="salaryRange">Desired Salary:</label></td>
+          <td colspan="5">
+            <input type="range" id="salaryRange" name="salaryRange" min="20000" max="200000" step="1000" value="50000"
+                   oninput="document.getElementById('salaryValue').textContent='$' + this.value"
+                   title="Select your desired salary between $20,000 and $200,000">
+            <span id="salaryValue">$50000</span>
+          </td>
+        </tr>
+        <!-- Described Symptoms Text Area -->
+        <tr>
+          <td><label for="symptoms">Described Symptoms:</label></td>
+          <td colspan="5">
+            <textarea id="symptoms" name="symptoms" rows="4" cols="50" 
+                      placeholder='Enter any symptoms, avoid double quotes ("")'
+                      title="Enter symptoms; avoid double quotes"></textarea>
+          </td>
+        </tr>
+        <!-- Desired User ID -->
+        <tr>
+          <td><label for="userID">Desired User ID:</label></td>
+          <td colspan="5">
+            <input type="text" id="userID" name="userID" 
+                   pattern="^[A-Za-z][A-Za-z0-9_-]{4,29}$" 
+                   title="5-30 characters: must start with a letter, no spaces, only letters, numbers, underscore or dash" 
+                   required onblur="this.value=this.value.toLowerCase()">
+          </td>
+        </tr>
+        <!-- Password and Confirm Password -->
+        <tr>
+          <td><label for="password">Password:</label></td>
+          <td colspan="5">
+            <input type="password" id="password" name="password" 
+                   pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#%^&*()\-_+=\\/><.,`~])[A-Za-z\d!@#%^&*()\-_+=\\/><.,`~]{8,30}" 
+                   title="8-30 characters; must include at least one uppercase letter, one digit, and one special character (no quotes)" 
+                   required>
+          </td>
+        </tr>
+        <tr>
+          <td><label for="confirmPassword">Re-enter Password:</label></td>
+          <td colspan="5">
+            <input type="password" id="confirmPassword" name="confirmPassword" 
+                   title="Re-enter your password for confirmation" 
+                   required oninput="validatePassword()">
+          </td>
+        </tr>
+        <tr>
+          <td colspan="6" id="passwordError" style="color:red;"></td>
+        </tr>
 
-      <!-- Email Address -->
-      <tr>
-        <td><label for="email">Email:</label></td>
-        <td colspan="5"><input type="email" id="email" name="email" required></td>
-      </tr>
+        <!-- Form Buttons -->
+        <tr>
+          <td colspan="6" style="text-align: center;">
+            <input type="reset" value="CLEAR AND START OVER">
+            <input type="button" value="Review" onclick="reviewData()">
+            <input type="submit" value="Submit">
+          </td>
+        </tr>
+      </table>
+    </form>
+    
+    <!-- Div for displaying reviewed information -->
+    <div id="reviewOutput" style="margin-top:20px;"></div>
+  </div>
 
-       <!-- Gender Selection -->
-       <tr>
-        <td colspan="6">
-          <p>Gender:</p>
-          <input type="radio" id="genderMale" name="gender" value="Male">
-          <label for="genderMale">Male</label>
-          <input type="radio" id="genderFemale" name="gender" value="Female">
-          <label for="genderFemale">Female</label>
-          <input type="radio" id="genderOther" name="gender" value="Other">
-          <label for="genderOther">Other</label>
-        </td>
-      </tr>
+  <hr>
 
-      <!-- Health Scale (1-10) -->
-      <tr>
-        <td><label for="healthScale">Health Scale (1-10):</label></td>
-        <td colspan="5">
-          <input type="range" id="healthScale" name="healthScale" min="1" max="10" value="5">
-        </td>
-      </tr>
-
-      <!-- Vaccination Status -->
-      <tr>
-        <td colspan="6">
-          <p>Have you been vaccinated?</p>
-          <input type="radio" id="vaxYes" name="vaccinated" value="Yes">
-          <label for="vaxYes">Yes</label>
-          <input type="radio" id="vaxNo" name="vaccinated" value="No">
-          <label for="vaxNo">No</label>
-        </td>
-      </tr>
-
-      <!-- Insurance Status -->
-      <tr>
-        <td colspan="6">
-          <p>Do you have insurance?</p>
-          <input type="radio" id="insYes" name="insurance" value="Yes">
-          <label for="insYes">Yes</label>
-          <input type="radio" id="insNo" name="insurance" value="No">
-          <label for="insNo">No</label>
-        </td>
-      </tr>
-
-      <!-- Checkboxes -->
-      <tr>
-        <td colspan="6">
-          <p>Check all that apply (Medical History):</p>
-          <input type="checkbox" id="chickenPox" name="history" value="ChickenPox">
-          <label for="chickenPox">Chicken Pox</label>
-          <input type="checkbox" id="measles" name="history" value="Measles">
-          <label for="measles">Measles</label>
-          <input type="checkbox" id="covid" name="history" value="Covid-19">
-          <label for="covid">Covid-19</label>
-          <input type="checkbox" id="smallPox" name="history" value="SmallPox">
-          <label for="smallPox">Small Pox</label>
-          <input type="checkbox" id="tetanus" name="history" value="Tetanus">
-          <label for="tetanus">Tetanus</label>
-        </td>
-      </tr>
-
-      <!-- Form Buttons -->
-      <tr>
-        <td colspan="6" style="text-align: center;">
-          <input type="reset" value="CLEAR AND START OVER">
-          <input type="submit" value="Submit">
-        </td>
-      </tr>
-    </table>
-  </form>
-</div>
-
-<hr>
-
-<!-- FOOTER SECTION -->
-<div class="footer-section">
-  <p>Magical Medical Center | <button onclick="alert('Contact us at 1-800-555-1234 or email contact@magicalmedicalcenter.com');">Contact Us</button> | 
-    <a href="https://facebook.com" target="_blank">Facebook</a> 
-    <a href="https://twitter.com" target="_blank">Twitter</a>
-  </p>
-  <p>PO BOX 18881, Sugar Land, TX 77496</p>
-</div>
+  <!-- FOOTER SECTION -->
+  <div class="footer-section">
+    <p>
+      Magical Medical Center | 
+      <button onclick="alert('Contact us at 1-800-555-1234 or email contact@magicalmedicalcenter.com');">
+        Contact Us
+      </button> | 
+      <a href="https://facebook.com" target="_blank">Facebook</a> 
+      <a href="https://twitter.com" target="_blank">Twitter</a>
+    </p>
+    <p>PO BOX 18881, Sugar Land, TX 77496</p>
+  </div>
 
 </body>
 </html>
