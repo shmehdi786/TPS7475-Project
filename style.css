@@ -13,56 +13,55 @@ body {
     font-family: Verdana, Arial, sans-serif;
     color: #333;
     margin: 20px;
-  }
+}
   
-  /* Heading styles */
-  h1, h2 {
+/* Heading styles */
+h1, h2 {
     font-family: "Trebuchet MS", sans-serif;
     color: #006699;
-  }
+}
   
-  /* Hyperlinks (unvisited, visited) */
-  a {
+/* Hyperlinks (unvisited, visited) */
+a {
     color: #006699;
     text-decoration: none;
-  }
-  a:visited {
+}
+a:visited {
     color: #663399;
-  }
-  a:hover {
+}
+a:hover {
     text-decoration: underline;
-  }
+}
   
-  /* Header banner section */
-  .header-banner {
+/* Header banner section */
+.header-banner {
     background-color: #cceeff;
     padding: 10px;
     display: flex;
     align-items: center;
     gap: 15px;
-  }
+}
   
-  /* Main form section */
-  .main-section {
+/* Main form section */
+.main-section {
     margin: 20px 0;
-  }
+}
   
-  /* Table styling for the form */
-  table {
+/* Table styling for the form */
+table {
     border-collapse: collapse;
     width: 100%;
     max-width: 900px;
-  }
-  table td {
+}
+table td {
     padding: 8px;
     vertical-align: top;
-  }
+}
   
-  /* Footer section */
-  .footer-section {
+/* Footer section */
+.footer-section {
     background-color: #eee;
     padding: 10px;
     text-align: center;
     margin-top: 20px;
-  }
-  
+}
