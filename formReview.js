@@ -1,31 +1,31 @@
 // Function to validate that the two password fields match and that the password
 // does not include the desired user ID or parts of the user's name.
 function validatePassword(){
-    var pwd = document.getElementById("password").value;
-    var cpwd = document.getElementById("confirmPassword").value;
-    var userId = document.getElementById("userID").value;
-    var firstName = document.getElementById("firstName").value;
-    var lastName = document.getElementById("lastName").value;
-    var errorMsg = "";
-    
-    // Check if passwords match
-    if(pwd !== cpwd){
-        errorMsg = "Passwords do not match.";
-    }
-    // Check if password contains userID
-    if(userId && pwd.toLowerCase().includes(userId.toLowerCase())){
-        errorMsg = "Password should not contain your user ID.";
-    }
-    // Check if password contains first or last name
-    if((firstName && pwd.toLowerCase().includes(firstName.toLowerCase())) || 
-       (lastName && pwd.toLowerCase().includes(lastName.toLowerCase()))){
-        errorMsg = "Password should not contain your name.";
-    }
-    document.getElementById("passwordError").textContent = errorMsg;
-  }
+  var pwd = document.getElementById("password").value;
+  var cpwd = document.getElementById("confirmPassword").value;
+  var userId = document.getElementById("userID").value;
+  var firstName = document.getElementById("firstName").value;
+  var lastName = document.getElementById("lastName").value;
+  var errorMsg = "";
   
-  // Function to review the form data and display it in a review section.
-  function reviewData() {
+  // Check if passwords match
+  if(pwd !== cpwd){
+      errorMsg = "Passwords do not match.";
+  }
+  // Check if password contains userID
+  if(userId && pwd.toLowerCase().includes(userId.toLowerCase())){
+      errorMsg = "Password should not contain your user ID.";
+  }
+  // Check if password contains first or last name
+  if((firstName && pwd.toLowerCase().includes(firstName.toLowerCase())) || 
+     (lastName && pwd.toLowerCase().includes(lastName.toLowerCase()))){
+      errorMsg = "Password should not contain your name.";
+  }
+  document.getElementById("passwordError").textContent = errorMsg;
+}
+
+// Function to review the form data and display it in the review section.
+function reviewData() {
     // Get values from form fields
     var firstName = document.getElementById("firstName").value;
     var middleInitial = document.getElementById("middleInitial").value;
@@ -45,9 +45,9 @@ function validatePassword(){
     
     // Truncate ZIP code to the first 5 digits if a ZIP+4 is entered
     if (zip.indexOf('-') !== -1) {
-        zip = zip.split('-')[0];
+      zip = zip.split('-')[0];
     } else if (zip.length > 5) {
-        zip = zip.substring(0, 5);
+      zip = zip.substring(0, 5);
     }
     
     // Get selected gender (radio buttons)
