@@ -1,0 +1,68 @@
+/*
+  File: style.css
+  Author: Hijab Mehdi
+  Date created: 02/08/2025
+  Date edited: 02/10/2025
+  Version: 1.0
+  Description: External CSS for patient registration form.
+*/
+
+/* Basic page (body) styling */
+body {
+    background-color: #f0f8ff; /* Light blue/gray-ish background */
+    font-family: Verdana, Arial, sans-serif;
+    color: #333;
+    margin: 20px;
+  }
+  
+  /* Heading styles */
+  h1, h2 {
+    font-family: "Trebuchet MS", sans-serif;
+    color: #006699;
+  }
+  
+  /* Hyperlinks (unvisited, visited) */
+  a {
+    color: #006699;
+    text-decoration: none;
+  }
+  a:visited {
+    color: #663399;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Header banner section */
+  .header-banner {
+    background-color: #cceeff;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  /* Main form section */
+  .main-section {
+    margin: 20px 0;
+  }
+  
+  /* Table styling for the form */
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 900px;
+  }
+  table td {
+    padding: 8px;
+    vertical-align: top;
+  }
+  
+  /* Footer section */
+  .footer-section {
+    background-color: #eee;
+    padding: 10px;
+    text-align: center;
+    margin-top: 20px;
+  }
+  
