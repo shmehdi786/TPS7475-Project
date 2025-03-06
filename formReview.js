@@ -1,5 +1,8 @@
 // Helper function to validate Date of Birth.
 function validateDOB(dob) {
+  if (!dob || dob.trim() === "") {
+    return "ERROR: Missing Date of Birth";
+  }
   var dobDate = new Date(dob);
   var today = new Date();
   if (dobDate > today) {
@@ -15,24 +18,36 @@ function validateDOB(dob) {
 
 // Helper function to validate email.
 function validateEmail(email) {
+  if (!email || email.trim() === "") {
+    return "ERROR: Missing Email";
+  }
   var regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return regex.test(email) ? "pass" : "ERROR: Invalid email format";
 }
 
 // Helper function to validate phone number.
 function validatePhone(phone) {
+  if (!phone || phone.trim() === "") {
+    return "ERROR: Missing Phone Number";
+  }
   var regex = /^\d{3}-\d{3}-\d{4}$/;
   return regex.test(phone) ? "pass" : "ERROR: Phone number must be in 000-000-0000 format";
 }
 
 // Helper function to validate user ID.
 function validateUserID(userID) {
+  if (!userID || userID.trim() === "") {
+    return "ERROR: Missing User ID";
+  }
   var regex = /^[A-Za-z][A-Za-z0-9_-]{4,29}$/;
   return regex.test(userID) ? "pass" : "ERROR: Invalid User ID format";
 }
 
 // Helper function to validate password for review.
 function validatePasswordReview(pwd, cpwd) {
+  if (!pwd || !cpwd) {
+    return "ERROR: Missing Password";
+  }
   if (pwd !== cpwd) {
     return "ERROR: Passwords do not match";
   }
@@ -52,14 +67,14 @@ function validatePassword() {
   var lastName = document.getElementById("lastName").value;
   var errorMsg = "";
   
-  if (pwd !== cpwd) {
+  if (pwd === "" || cpwd === "") {
+    errorMsg = "ERROR: Missing Password";
+  } else if (pwd !== cpwd) {
     errorMsg = "Passwords do not match.";
-  }
-  if (userId && pwd.toLowerCase().includes(userId.toLowerCase())) {
+  } else if (userId && pwd.toLowerCase().includes(userId.toLowerCase())) {
     errorMsg = "Password should not contain your user ID.";
-  }
-  if ((firstName && pwd.toLowerCase().includes(firstName.toLowerCase())) ||
-      (lastName && pwd.toLowerCase().includes(lastName.toLowerCase()))) {
+  } else if ((firstName && pwd.toLowerCase().includes(firstName.toLowerCase())) ||
+             (lastName && pwd.toLowerCase().includes(lastName.toLowerCase()))) {
     errorMsg = "Password should not contain your name.";
   }
   
@@ -79,22 +94,22 @@ function checkForm() {
 
 // Function to review the form data and display it.
 function reviewData() {
-    // Get values from form fields
-    var firstName = document.getElementById("firstName").value;
-    var middleInitial = document.getElementById("middleInitial").value;
-    var lastName = document.getElementById("lastName").value;
-    var dob = document.getElementById("dob").value;
-    var ssn = document.getElementById("ssn").value;
-    var address1 = document.getElementById("address1").value;
-    var address2 = document.getElementById("address2").value;
-    var city = document.getElementById("city").value;
-    var state = document.getElementById("state").value;
-    var zip = document.getElementById("zip").value;
-    var email = document.getElementById("email").value;
-    var phone = document.getElementById("phone").value;
-    var salaryRange = document.getElementById("salaryRange").value;
-    var symptoms = document.getElementById("symptoms").value;
-    var userID = document.getElementById("userID").value;
+    // Get values from form fields (trim strings to remove extra spaces)
+    var firstName = document.getElementById("firstName").value.trim();
+    var middleInitial = document.getElementById("middleInitial").value.trim();
+    var lastName = document.getElementById("lastName").value.trim();
+    var dob = document.getElementById("dob").value.trim();
+    var ssn = document.getElementById("ssn").value.trim();
+    var address1 = document.getElementById("address1").value.trim();
+    var address2 = document.getElementById("address2").value.trim();
+    var city = document.getElementById("city").value.trim();
+    var state = document.getElementById("state").value.trim();
+    var zip = document.getElementById("zip").value.trim();
+    var email = document.getElementById("email").value.trim();
+    var phone = document.getElementById("phone").value.trim();
+    var salaryRange = document.getElementById("salaryRange").value.trim();
+    var symptoms = document.getElementById("symptoms").value.trim();
+    var userID = document.getElementById("userID").value.trim();
     
     // Get password and confirm password
     var password = document.getElementById("password").value;
@@ -107,6 +122,16 @@ function reviewData() {
       zip = zip.substring(0, 5);
     }
     
+    // Validate required fields manually if empty
+    var nameStatus = (firstName === "" || lastName === "") ? "ERROR: Missing Name" : "pass";
+    var dobStatus = (dob === "") ? "ERROR: Missing Date of Birth" : validateDOB(dob);
+    var ssnStatus = (ssn === "") ? "ERROR: Missing Social Security" : "pass";
+    var addressStatus = (address1 === "") ? "ERROR: Missing Address" : "pass";
+    var emailStatus = (email === "") ? "ERROR: Missing Email" : validateEmail(email);
+    var phoneStatus = (phone === "") ? "ERROR: Missing Phone Number" : validatePhone(phone);
+    var userIDStatus = (userID === "") ? "ERROR: Missing User ID" : validateUserID(userID);
+    var pwdStatus = validatePasswordReview(password, confirmPassword);
+    
     // Get selected gender (radio buttons)
     var gender = "";
     var genderRadios = document.getElementsByName("gender");
@@ -116,6 +141,7 @@ function reviewData() {
         break;
       }
     }
+    var genderStatus = (gender !== "" ? "pass" : "ERROR: Not selected");
     
     // Get health scale value
     var healthScale = document.getElementById("healthScale").value;
@@ -129,6 +155,7 @@ function reviewData() {
         break;
       }
     }
+    var vaccinatedStatus = (vaccinated !== "" ? "pass" : "ERROR: Not selected");
     
     // Get insurance status (radio buttons)
     var insurance = "";
@@ -139,6 +166,7 @@ function reviewData() {
         break;
       }
     }
+    var insuranceStatus = (insurance !== "" ? "pass" : "ERROR: Not selected");
     
     // Get checked checkboxes for medical history
     var history = [];
@@ -154,39 +182,35 @@ function reviewData() {
     reviewHTML += "<table border='1' cellpadding='5' cellspacing='0'>";
     
     // Name
-    var nameValue = firstName + " " + middleInitial + " " + lastName;
-    reviewHTML += "<tr><td><strong>Name</strong></td><td>" + nameValue + "</td><td><span style='color:green;'>pass</span></td></tr>";
+    reviewHTML += "<tr><td><strong>Name</strong></td><td>" + (firstName + " " + middleInitial + " " + lastName) + "</td><td>" + 
+                  (nameStatus === "pass" ? "<span style='color:green;'>pass</span>" : "<span style='color:red;'>" + nameStatus + "</span>") + "</td></tr>";
     
     // Date of Birth
-    var dobStatus = validateDOB(dob);
     reviewHTML += "<tr><td><strong>Date of Birth</strong></td><td>" + dob + "</td><td>" + 
                   (dobStatus === "pass" ? "<span style='color:green;'>pass</span>" : "<span style='color:red;'>" + dobStatus + "</span>") + "</td></tr>";
     
     // Social Security
-    reviewHTML += "<tr><td><strong>Social Security #</strong></td><td>" + ssn + "</td><td><span style='color:green;'>pass</span></td></tr>";
+    reviewHTML += "<tr><td><strong>Social Security #</strong></td><td>" + ssn + "</td><td>" + 
+                  (ssnStatus === "pass" ? "<span style='color:green;'>pass</span>" : "<span style='color:red;'>" + ssnStatus + "</span>") + "</td></tr>";
     
     // Address
     var addressValue = address1;
-    if (address2.trim() !== "") { 
+    if (address2 !== "") { 
       addressValue += ", " + address2; 
     }
     addressValue += "<br>" + city + ", " + state + " " + zip;
-    var addressStatus = (address1.trim() === "" ? "ERROR: Missing Address" : "pass");
     reviewHTML += "<tr><td><strong>Address</strong></td><td>" + addressValue + "</td><td>" + 
                   (addressStatus === "pass" ? "<span style='color:green;'>pass</span>" : "<span style='color:red;'>" + addressStatus + "</span>") + "</td></tr>";
     
     // Email
-    var emailStatus = validateEmail(email);
     reviewHTML += "<tr><td><strong>Email</strong></td><td>" + email + "</td><td>" + 
                   (emailStatus === "pass" ? "<span style='color:green;'>pass</span>" : "<span style='color:red;'>" + emailStatus + "</span>") + "</td></tr>";
     
     // Phone
-    var phoneStatus = validatePhone(phone);
     reviewHTML += "<tr><td><strong>Phone Number</strong></td><td>" + phone + "</td><td>" + 
                   (phoneStatus === "pass" ? "<span style='color:green;'>pass</span>" : "<span style='color:red;'>" + phoneStatus + "</span>") + "</td></tr>";
     
     // Gender
-    var genderStatus = (gender !== "" ? "pass" : "ERROR: Not selected");
     reviewHTML += "<tr><td><strong>Gender</strong></td><td>" + (gender || "Not selected") + "</td><td>" + 
                   (genderStatus === "pass" ? "<span style='color:green;'>pass</span>" : "<span style='color:red;'>" + genderStatus + "</span>") + "</td></tr>";
     
@@ -194,12 +218,10 @@ function reviewData() {
     reviewHTML += "<tr><td><strong>Health Scale</strong></td><td>" + healthScale + "</td><td><span style='color:green;'>pass</span></td></tr>";
     
     // Vaccinated
-    var vaccinatedStatus = (vaccinated !== "" ? "pass" : "ERROR: Not selected");
     reviewHTML += "<tr><td><strong>Vaccinated</strong></td><td>" + (vaccinated || "Not selected") + "</td><td>" + 
                   (vaccinatedStatus === "pass" ? "<span style='color:green;'>pass</span>" : "<span style='color:red;'>" + vaccinatedStatus + "</span>") + "</td></tr>";
     
     // Insurance
-    var insuranceStatus = (insurance !== "" ? "pass" : "ERROR: Not selected");
     reviewHTML += "<tr><td><strong>Insurance</strong></td><td>" + (insurance || "Not selected") + "</td><td>" + 
                   (insuranceStatus === "pass" ? "<span style='color:green;'>pass</span>" : "<span style='color:red;'>" + insuranceStatus + "</span>") + "</td></tr>";
     
@@ -213,12 +235,10 @@ function reviewData() {
     reviewHTML += "<tr><td><strong>Described Symptoms</strong></td><td>" + (symptoms || "None") + "</td><td><span style='color:green;'>pass</span></td></tr>";
     
     // User ID
-    var userIDStatus = validateUserID(userID);
     reviewHTML += "<tr><td><strong>User ID</strong></td><td>" + userID + "</td><td>" + 
                   (userIDStatus === "pass" ? "<span style='color:green;'>pass</span>" : "<span style='color:red;'>" + userIDStatus + "</span>") + "</td></tr>";
     
     // Password (masked)
-    var pwdStatus = validatePasswordReview(password, confirmPassword);
     reviewHTML += "<tr><td><strong>Password</strong></td><td>" + "********" + "</td><td>" + 
                   (pwdStatus === "pass" ? "<span style='color:green;'>pass</span>" : "<span style='color:red;'>" + pwdStatus + "</span>") + "</td></tr>";
     
@@ -230,6 +250,7 @@ function reviewData() {
     // Scroll to the review section
     document.getElementById("reviewOutput").scrollIntoView({ behavior: "smooth" });
 }
+
 
 
 
