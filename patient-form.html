@@ -3,7 +3,7 @@
     Author: Hijab Mehdi
     Date created: 02/08/2025
     Date last edited: 02/10/2025
-    Version: 2.0
+    Version: 2.1
     Description: This file contains a patient registration form with advanced validation,
                  dynamic review, and additional fields per assignment requirements.
 -->
@@ -44,16 +44,16 @@
   <hr>
 
   <!-- MAIN FORM SECTION -->
+  <!-- The onsubmit handler will check if passwords are valid before submitting -->
   <div class="main-section">
     <h2>Patient Registration Form</h2>
     
-    <form action="thankyou.html">
+    <form action="thankyou.html" onsubmit="return checkForm();">
       <table>
         <!-- Block/Area 1: Name and Date of Birth -->
         <tr>
           <td><label for="firstName">First Name:</label></td>
           <td>
-            <!-- Letters, apostrophes, dashes only, 1-30 -->
             <input type="text" id="firstName" name="firstName" maxlength="30" 
                    pattern="^[A-Za-z'\-]{1,30}$" 
                    title="1-30 characters: letters, apostrophes, and dashes only" 
@@ -61,14 +61,12 @@
           </td>
           <td><label for="middleInitial">MI:</label></td>
           <td>
-            <!-- Optional single letter only -->
             <input type="text" id="middleInitial" name="middleInitial" maxlength="1" 
                    pattern="^[A-Za-z]?$" 
                    title="Optional: a single letter only">
           </td>
           <td><label for="lastName">Last Name:</label></td>
           <td>
-            <!-- Letters, numbers, apostrophes, dashes, up to 30 -->
             <input type="text" id="lastName" name="lastName" maxlength="30" 
                    pattern="^[A-Za-z0-9'\-]{1,30}$" 
                    title="1-30 characters: letters, numbers, apostrophes, and dashes only" 
@@ -78,7 +76,6 @@
         <tr>
           <td><label for="dob">Date of Birth:</label></td>
           <td>
-            <!-- Using type=date for built-in validation; min/max values can be hard-coded or dynamic -->
             <input type="date" id="dob" name="dob" 
                    min="1905-01-01" max="2025-02-09"
                    title="Enter your birthdate (cannot be in the future or more than 120 years ago)" 
@@ -86,14 +83,12 @@
           </td>
           <td><label for="ssn">Social Security #:</label></td>
           <td>
-            <!-- 9-11 digits, masked as password -->
             <input type="password" id="ssn" name="ssn" maxlength="11" 
                    pattern="^\d{9,11}$" 
                    placeholder="9-11 digits" 
                    title="Enter 9 to 11 digits for your Social Security number" 
                    required>
           </td>
-          <!-- Extra cells to balance the row -->
           <td></td>
           <td></td>
         </tr>
@@ -102,7 +97,6 @@
         <tr>
           <td><label for="address1">Address Line 1:</label></td>
           <td colspan="3">
-            <!-- 2-30 characters required -->
             <input type="text" id="address1" name="address1" maxlength="30" 
                    pattern=".{2,30}" 
                    title="Enter address (2-30 characters)" 
@@ -112,7 +106,6 @@
         <tr>
           <td><label for="address2">Address Line 2:</label></td>
           <td colspan="3">
-            <!-- optional 2-30 characters if filled in -->
             <input type="text" id="address2" name="address2" maxlength="30" 
                    pattern=".{2,30}" 
                    title="If provided, enter address (2-30 characters)">
@@ -186,7 +179,6 @@
           </td>
           <td><label for="zip">Zip:</label></td>
           <td>
-            <!-- 5 digits or 9 digits with dash -->
             <input type="text" id="zip" name="zip" maxlength="10" 
                    pattern="^\d{5}(-\d{4})?$" 
                    placeholder="5 or 9 digits" 
@@ -199,7 +191,6 @@
         <tr>
           <td><label for="email">Email:</label></td>
           <td colspan="5">
-            <!-- Type email for basic HTML validation, plus optional title -->
             <input type="email" id="email" name="email" 
                    title="Enter your email in the format name@domain.tld" 
                    required>
@@ -208,7 +199,6 @@
         <tr>
           <td><label for="phone">Phone Number:</label></td>
           <td colspan="5">
-            <!-- 000-000-0000 format -->
             <input type="tel" id="phone" name="phone" 
                    pattern="^\d{3}-\d{3}-\d{4}$" 
                    placeholder="000-000-0000" 
@@ -305,7 +295,7 @@
             <input type="password" id="password" name="password" 
                    pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#%^&*()\-_+=\\/><.,`~])[A-Za-z\d!@#%^&*()\-_+=\\/><.,`~]{8,30}" 
                    title="8-30 characters; must include at least one uppercase letter, one digit, and one special character (no quotes)" 
-                   required>
+                   required oninput="validatePassword()">
           </td>
         </tr>
         <tr>
@@ -317,7 +307,6 @@
           </td>
         </tr>
         <tr>
-          <!-- Error message area for password mismatch or other rules -->
           <td colspan="6" id="passwordError" style="color:red;"></td>
         </tr>
 
@@ -325,7 +314,6 @@
         <tr>
           <td colspan="6" style="text-align: center;">
             <input type="reset" value="CLEAR AND START OVER">
-            <!-- REVIEW BUTTON calls reviewData() from formReview.js -->
             <input type="button" value="Review" onclick="reviewData()">
             <input type="submit" value="Submit">
           </td>
