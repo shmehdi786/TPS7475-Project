@@ -31,19 +31,40 @@ function validateUserID(userID) {
   return regex.test(userID) ? "pass" : "ERROR: Invalid User ID format";
 }
 
-// Helper function to validate password.
-function validatePasswordReview(pwd, cpwd) {
+// Helper function to dynamically validate password fields.
+function validatePassword() {
+  var pwd = document.getElementById("password").value;
+  var cpwd = document.getElementById("confirmPassword").value;
+  var userId = document.getElementById("userID").value;
+  var firstName = document.getElementById("firstName").value;
+  var lastName = document.getElementById("lastName").value;
+  var errorMsg = "";
+  
   if (pwd !== cpwd) {
-    return "ERROR: Passwords do not match";
+    errorMsg = "Passwords do not match.";
   }
-  var regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#%^&*()\-_+=\\/><.,`~])[A-Za-z\d!@#%^&*()\-_+=\\/><.,`~]{8,30}$/;
-  if (!regex.test(pwd)) {
-    return "ERROR: Password must be 8-30 characters with at least one uppercase, one digit, and one special character";
+  if (userId && pwd.toLowerCase().includes(userId.toLowerCase())) {
+    errorMsg = "Password should not contain your user ID.";
   }
-  return "pass";
+  if ((firstName && pwd.toLowerCase().includes(firstName.toLowerCase())) ||
+      (lastName && pwd.toLowerCase().includes(lastName.toLowerCase()))) {
+    errorMsg = "Password should not contain your name.";
+  }
+  document.getElementById("passwordError").textContent = errorMsg;
 }
 
-// Main function to review the form data and display it.
+// Function to check the form before submission.
+function checkForm() {
+  // Prevent submission if there's any password error
+  var error = document.getElementById("passwordError").textContent;
+  if (error !== "") {
+    alert("Please fix the password error before submitting.");
+    return false;
+  }
+  return true;
+}
+
+// Function to review the form data and display it.
 function reviewData() {
     // Get values from form fields
     var firstName = document.getElementById("firstName").value;
@@ -66,7 +87,7 @@ function reviewData() {
     var password = document.getElementById("password").value;
     var confirmPassword = document.getElementById("confirmPassword").value;
     
-    // Truncate ZIP code to the first 5 digits if a ZIP+4 is entered
+    // Truncate ZIP code to first 5 digits if ZIP+4 entered
     if (zip.indexOf('-') !== -1) {
       zip = zip.split('-')[0];
     } else if (zip.length > 5) {
@@ -115,7 +136,7 @@ function reviewData() {
       }
     }
     
-    // Build HTML to display the reviewed information in a table with 3 columns (Field, Value, Status)
+    // Build HTML for review table with Field, Value, Status columns
     var reviewHTML = "<h3>PLEASE REVIEW THIS INFORMATION</h3>";
     reviewHTML += "<table border='1' cellpadding='5' cellspacing='0'>";
     
@@ -125,7 +146,8 @@ function reviewData() {
     
     // Date of Birth
     var dobStatus = validateDOB(dob);
-    reviewHTML += "<tr><td><strong>Date of Birth</strong></td><td>" + dob + "</td><td>" + (dobStatus === "pass" ? "<span style='color:green;'>pass</span>" : "<span style='color:red;'>" + dobStatus + "</span>") + "</td></tr>";
+    reviewHTML += "<tr><td><strong>Date of Birth</strong></td><td>" + dob + "</td><td>" + 
+                  (dobStatus === "pass" ? "<span style='color:green;'>pass</span>" : "<span style='color:red;'>" + dobStatus + "</span>") + "</td></tr>";
     
     // Social Security
     reviewHTML += "<tr><td><strong>Social Security #</strong></td><td>" + ssn + "</td><td><span style='color:green;'>pass</span></td></tr>";
@@ -137,30 +159,36 @@ function reviewData() {
     }
     addressValue += "<br>" + city + ", " + state + " " + zip;
     var addressStatus = (address1.trim() === "" ? "ERROR: Missing Address" : "pass");
-    reviewHTML += "<tr><td><strong>Address</strong></td><td>" + addressValue + "</td><td>" + (addressStatus === "pass" ? "<span style='color:green;'>pass</span>" : "<span style='color:red;'>" + addressStatus + "</span>") + "</td></tr>";
+    reviewHTML += "<tr><td><strong>Address</strong></td><td>" + addressValue + "</td><td>" + 
+                  (addressStatus === "pass" ? "<span style='color:green;'>pass</span>" : "<span style='color:red;'>" + addressStatus + "</span>") + "</td></tr>";
     
     // Email
     var emailStatus = validateEmail(email);
-    reviewHTML += "<tr><td><strong>Email</strong></td><td>" + email + "</td><td>" + (emailStatus === "pass" ? "<span style='color:green;'>pass</span>" : "<span style='color:red;'>" + emailStatus + "</span>") + "</td></tr>";
+    reviewHTML += "<tr><td><strong>Email</strong></td><td>" + email + "</td><td>" + 
+                  (emailStatus === "pass" ? "<span style='color:green;'>pass</span>" : "<span style='color:red;'>" + emailStatus + "</span>") + "</td></tr>";
     
     // Phone
     var phoneStatus = validatePhone(phone);
-    reviewHTML += "<tr><td><strong>Phone Number</strong></td><td>" + phone + "</td><td>" + (phoneStatus === "pass" ? "<span style='color:green;'>pass</span>" : "<span style='color:red;'>" + phoneStatus + "</span>") + "</td></tr>";
+    reviewHTML += "<tr><td><strong>Phone Number</strong></td><td>" + phone + "</td><td>" + 
+                  (phoneStatus === "pass" ? "<span style='color:green;'>pass</span>" : "<span style='color:red;'>" + phoneStatus + "</span>") + "</td></tr>";
     
     // Gender
     var genderStatus = (gender !== "" ? "pass" : "ERROR: Not selected");
-    reviewHTML += "<tr><td><strong>Gender</strong></td><td>" + (gender || "Not selected") + "</td><td>" + (genderStatus === "pass" ? "<span style='color:green;'>pass</span>" : "<span style='color:red;'>" + genderStatus + "</span>") + "</td></tr>";
+    reviewHTML += "<tr><td><strong>Gender</strong></td><td>" + (gender || "Not selected") + "</td><td>" + 
+                  (genderStatus === "pass" ? "<span style='color:green;'>pass</span>" : "<span style='color:red;'>" + genderStatus + "</span>") + "</td></tr>";
     
     // Health Scale
     reviewHTML += "<tr><td><strong>Health Scale</strong></td><td>" + healthScale + "</td><td><span style='color:green;'>pass</span></td></tr>";
     
     // Vaccinated
     var vaccinatedStatus = (vaccinated !== "" ? "pass" : "ERROR: Not selected");
-    reviewHTML += "<tr><td><strong>Vaccinated</strong></td><td>" + (vaccinated || "Not selected") + "</td><td>" + (vaccinatedStatus === "pass" ? "<span style='color:green;'>pass</span>" : "<span style='color:red;'>" + vaccinatedStatus + "</span>") + "</td></tr>";
+    reviewHTML += "<tr><td><strong>Vaccinated</strong></td><td>" + (vaccinated || "Not selected") + "</td><td>" + 
+                  (vaccinatedStatus === "pass" ? "<span style='color:green;'>pass</span>" : "<span style='color:red;'>" + vaccinatedStatus + "</span>") + "</td></tr>";
     
     // Insurance
     var insuranceStatus = (insurance !== "" ? "pass" : "ERROR: Not selected");
-    reviewHTML += "<tr><td><strong>Insurance</strong></td><td>" + (insurance || "Not selected") + "</td><td>" + (insuranceStatus === "pass" ? "<span style='color:green;'>pass</span>" : "<span style='color:red;'>" + insuranceStatus + "</span>") + "</td></tr>";
+    reviewHTML += "<tr><td><strong>Insurance</strong></td><td>" + (insurance || "Not selected") + "</td><td>" + 
+                  (insuranceStatus === "pass" ? "<span style='color:green;'>pass</span>" : "<span style='color:red;'>" + insuranceStatus + "</span>") + "</td></tr>";
     
     // Medical History
     reviewHTML += "<tr><td><strong>Medical History</strong></td><td>" + (history.length > 0 ? history.join(", ") : "None") + "</td><td><span style='color:green;'>pass</span></td></tr>";
@@ -173,12 +201,13 @@ function reviewData() {
     
     // User ID
     var userIDStatus = validateUserID(userID);
-    reviewHTML += "<tr><td><strong>User ID</strong></td><td>" + userID + "</td><td>" + (userIDStatus === "pass" ? "<span style='color:green;'>pass</span>" : "<span style='color:red;'>" + userIDStatus + "</span>") + "</td></tr>";
+    reviewHTML += "<tr><td><strong>User ID</strong></td><td>" + userID + "</td><td>" + 
+                  (userIDStatus === "pass" ? "<span style='color:green;'>pass</span>" : "<span style='color:red;'>" + userIDStatus + "</span>") + "</td></tr>";
     
-    // Password
+    // Password (masked)
     var pwdStatus = validatePasswordReview(password, confirmPassword);
-    // Do not display the actual password, just asterisks
-    reviewHTML += "<tr><td><strong>Password</strong></td><td>" + "********" + "</td><td>" + (pwdStatus === "pass" ? "<span style='color:green;'>pass</span>" : "<span style='color:red;'>" + pwdStatus + "</span>") + "</td></tr>";
+    reviewHTML += "<tr><td><strong>Password</strong></td><td>" + "********" + "</td><td>" + 
+                  (pwdStatus === "pass" ? "<span style='color:green;'>pass</span>" : "<span style='color:red;'>" + pwdStatus + "</span>") + "</td></tr>";
     
     reviewHTML += "</table>";
     
@@ -188,4 +217,5 @@ function reviewData() {
     // Scroll to the review section
     document.getElementById("reviewOutput").scrollIntoView({ behavior: "smooth" });
 }
+
 
