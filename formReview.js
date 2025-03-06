@@ -31,7 +31,19 @@ function validateUserID(userID) {
   return regex.test(userID) ? "pass" : "ERROR: Invalid User ID format";
 }
 
-// Helper function to dynamically validate password fields.
+// Helper function to validate password for review.
+function validatePasswordReview(pwd, cpwd) {
+  if (pwd !== cpwd) {
+    return "ERROR: Passwords do not match";
+  }
+  var regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#%^&*()\-_+=\\/><.,~])[A-Za-z\d!@#%^&*()\-_+=\\/><.,~]{8,30}$/;
+  if (!regex.test(pwd)) {
+    return "ERROR: Password must be 8-30 characters with at least one uppercase, one digit, and one special character";
+  }
+  return "pass";
+}
+
+// Dynamically validate password fields on input.
 function validatePassword() {
   var pwd = document.getElementById("password").value;
   var cpwd = document.getElementById("confirmPassword").value;
@@ -50,12 +62,13 @@ function validatePassword() {
       (lastName && pwd.toLowerCase().includes(lastName.toLowerCase()))) {
     errorMsg = "Password should not contain your name.";
   }
+  
   document.getElementById("passwordError").textContent = errorMsg;
 }
 
 // Function to check the form before submission.
 function checkForm() {
-  // Prevent submission if there's any password error
+  // Check if there's any dynamic password error message
   var error = document.getElementById("passwordError").textContent;
   if (error !== "") {
     alert("Please fix the password error before submitting.");
@@ -136,7 +149,7 @@ function reviewData() {
       }
     }
     
-    // Build HTML for review table with Field, Value, Status columns
+    // Build HTML for review table with Field, Value, and Status columns
     var reviewHTML = "<h3>PLEASE REVIEW THIS INFORMATION</h3>";
     reviewHTML += "<table border='1' cellpadding='5' cellspacing='0'>";
     
@@ -217,5 +230,6 @@ function reviewData() {
     // Scroll to the review section
     document.getElementById("reviewOutput").scrollIntoView({ behavior: "smooth" });
 }
+
 
 
