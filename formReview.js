@@ -239,13 +239,27 @@ function autoFormatSSN() {
   var value = ssnField.value;
   // Remove all non-digit characters
   value = value.replace(/\D/g, "");
-  // Insert dashes as needed
+  // Insert dashes as needed to format as XXX-XX-XXXX
   if (value.length > 3 && value.length <= 5) {
     value = value.substring(0, 3) + "-" + value.substring(3);
   } else if (value.length > 5) {
     value = value.substring(0, 3) + "-" + value.substring(3, 5) + "-" + value.substring(5, 9);
   }
   ssnField.value = value;
+}
+
+function autoFormatPhone() {
+  var phoneField = document.getElementById("phone");
+  var value = phoneField.value;
+  // Remove all non-digit characters
+  value = value.replace(/\D/g, "");
+  // Format as 000-000-0000
+  if (value.length > 3 && value.length <= 6) {
+    value = value.substring(0, 3) + "-" + value.substring(3);
+  } else if (value.length > 6) {
+    value = value.substring(0, 3) + "-" + value.substring(3, 6) + "-" + value.substring(6, 10);
+  }
+  phoneField.value = value;
 }
 
 // ------------------------
