@@ -39,7 +39,7 @@ function validateUserID(userID) {
   if (!userID || userID.trim() === "") {
     return "ERROR: Missing User ID";
   }
-  var regex = /^[A-Za-z][A-Za-z0-9_-]{4,29}$/;
+  var regex = /^[A-Za-z][A-Za-z0-9_-]{4,19}$/;
   return regex.test(userID) ? "pass" : "ERROR: Invalid User ID format";
 }
 
@@ -125,9 +125,10 @@ function validateSSNField() {
     errorSpan.textContent = "ERROR: Missing Social Security";
     return false;
   }
-  var regex = /^\d{9,11}$/;
+  // Expect formatted SSN: XXX-XX-XXXX
+  var regex = /^\d{3}-\d{2}-\d{4}$/;
   if(!regex.test(ssn)){
-    errorSpan.textContent = "ERROR: Must be 9 to 11 digits";
+    errorSpan.textContent = "ERROR: SSN must be formatted as 123-45-6789";
     return false;
   }
   errorSpan.textContent = "";
@@ -140,6 +141,21 @@ function validateAddress1Field() {
   if(addr === ""){
     errorSpan.textContent = "ERROR: Missing Address";
     return false;
+  }
+  if(addr.length < 2 || addr.length > 30){
+    errorSpan.textContent = "ERROR: Must be 2-30 characters";
+    return false;
+  }
+  errorSpan.textContent = "";
+  return true;
+}
+
+function validateAddress2Field() {
+  var addr = document.getElementById("address2").value.trim();
+  var errorSpan = document.getElementById("address2Error");
+  if(addr === ""){
+    errorSpan.textContent = "";
+    return true; // Optional field
   }
   if(addr.length < 2 || addr.length > 30){
     errorSpan.textContent = "ERROR: Must be 2-30 characters";
@@ -215,9 +231,26 @@ function validateUserIDField() {
   return result === "pass";
 }
 
-// Function to check the entire form before submission.
+// ------------------------
+// Auto-format Social Security Number as the user types.
+// Expected format: XXX-XX-XXXX
+function autoFormatSSN() {
+  var ssnField = document.getElementById("ssn");
+  var value = ssnField.value;
+  // Remove all non-digit characters
+  value = value.replace(/\D/g, "");
+  // Insert dashes as needed
+  if (value.length > 3 && value.length <= 5) {
+    value = value.substring(0, 3) + "-" + value.substring(3);
+  } else if (value.length > 5) {
+    value = value.substring(0, 3) + "-" + value.substring(3, 5) + "-" + value.substring(5, 9);
+  }
+  ssnField.value = value;
+}
+
+// ------------------------
+// Check the entire form before submission.
 function checkForm() {
-  // Call every field's validation function
   var valid = true;
   valid = validateFirstNameField() && valid;
   valid = validateMiddleInitialField() && valid;
@@ -241,6 +274,7 @@ function checkForm() {
   return valid;
 }
 
+// ------------------------
 // Function to review the form data and display it.
 function reviewData() {
     // Get values from form fields (trim strings to remove extra spaces)
@@ -274,7 +308,7 @@ function reviewData() {
     // Validate required fields manually if empty (using our helper functions)
     var nameStatus = (firstName === "" || lastName === "") ? "ERROR: Missing Name" : "pass";
     var dobStatus = (dob === "") ? "ERROR: Missing Date of Birth" : validateDOB(dob);
-    var ssnStatus = (ssn === "") ? "ERROR: Missing Social Security" : "pass";
+    var ssnStatus = (ssn === "") ? "ERROR: Missing Social Security" : validateSSN(ssn);
     var addressStatus = (address1 === "") ? "ERROR: Missing Address" : "pass";
     var emailStatus = (email === "") ? "ERROR: Missing Email" : validateEmail(email);
     var phoneStatus = (phone === "") ? "ERROR: Missing Phone Number" : validatePhone(phone);
@@ -399,6 +433,7 @@ function reviewData() {
     // Scroll to the review section
     document.getElementById("reviewOutput").scrollIntoView({ behavior: "smooth" });
 }
+
 
 
 
