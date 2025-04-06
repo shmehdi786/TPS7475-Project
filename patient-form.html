@@ -216,14 +216,14 @@
         </tr>
         <tr>
           <td><label for="phone">Phone Number:</label></td>
-          <td colspan="5">
-            <input type="tel" id="phone" name="phone" 
-                   pattern="^\d{3}-\d{3}-\d{4}$" 
-                   placeholder="000-000-0000" 
-                   title="Enter phone number as 000-000-0000" 
-                   required onblur="validatePhoneField()">
-            <span id="phoneError" class="error"></span>
-          </td>
+            <td colspan="5">
+                <input type="tel" id="phone" name="phone" 
+                    pattern="^\d{3}-\d{3}-\d{4}$" 
+                    placeholder="000-000-0000" 
+                    title="Enter phone number as 000-000-0000" 
+                    required oninput="autoFormatPhone()" onblur="validatePhoneField()">
+                <span id="phoneError" class="error"></span>
+            </td>
         </tr>
 
         <!-- Block/Area 4: Additional Choices -->
