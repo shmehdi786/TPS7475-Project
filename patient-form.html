@@ -1,13 +1,16 @@
 <!-- 
-    Program name: patient-form.html
+    Program name: homework3.html
     Author: Hijab Mehdi
     Date created: 02/08/2025
     Date last edited: 02/10/2025
-    Version: 3.0
+    Version: 3.1
     Description: This file contains a patient registration form with advanced dynamic
                  JavaScript validation for each field. As users enter or leave a field,
                  inline error messages are shown (or removed if corrected). Only when all
                  validations pass is the Submit button allowed to submit the form.
+                 Enhancements:
+                   - SSN field auto-formats as you type (e.g., 123-45-6789)
+                   - User ID maximum length is now 20 characters.
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -90,11 +93,11 @@
           </td>
           <td><label for="ssn">Social Security #:</label></td>
           <td>
-            <input type="password" id="ssn" name="ssn" maxlength="11" 
-                   pattern="^\d{9,11}$" 
-                   placeholder="9-11 digits" 
-                   title="Enter 9 to 11 digits for your Social Security number" 
-                   required onblur="validateSSNField()">
+            <!-- Changed type to "text" for auto-formatting; oninput calls autoFormatSSN() -->
+            <input type="text" id="ssn" name="ssn" maxlength="11" 
+                   placeholder="123456789" 
+                   title="Enter 9 digits. Auto-formats as 123-45-6789" 
+                   required oninput="autoFormatSSN()" onblur="validateSSNField()">
             <span id="ssnError" class="error"></span>
           </td>
           <td></td>
@@ -301,9 +304,10 @@
         <tr>
           <td><label for="userID">Desired User ID:</label></td>
           <td colspan="5">
+            <!-- Updated pattern: max 20 characters -->
             <input type="text" id="userID" name="userID" 
-                   pattern="^[A-Za-z][A-Za-z0-9_-]{4,29}$" 
-                   title="5-30 characters: must start with a letter, no spaces, only letters, numbers, underscore or dash" 
+                   pattern="^[A-Za-z][A-Za-z0-9_-]{4,19}$" 
+                   title="5-20 characters: must start with a letter, no spaces, only letters, numbers, underscore or dash" 
                    required onblur="validateUserIDField()">
             <span id="userIDError" class="error"></span>
           </td>
@@ -362,5 +366,6 @@
 
 </body>
 </html>
+
 
 
