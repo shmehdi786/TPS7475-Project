@@ -51,45 +51,194 @@ function validatePasswordReview(pwd, cpwd) {
   if (pwd !== cpwd) {
     return "ERROR: Passwords do not match";
   }
-  var regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#%^&*()\-_+=\\/><.,~])[A-Za-z\d!@#%^&*()\-_+=\\/><.,~]{8,30}$/;
+  var regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#%^&*()\-_+=\\/><.,`~])[A-Za-z\d!@#%^&*()\-_+=\\/><.,`~]{8,30}$/;
   if (!regex.test(pwd)) {
     return "ERROR: Password must be 8-30 characters with at least one uppercase, one digit, and one special character";
   }
   return "pass";
 }
 
-// Dynamically validate password fields on input.
-function validatePassword() {
-  var pwd = document.getElementById("password").value;
-  var cpwd = document.getElementById("confirmPassword").value;
-  var userId = document.getElementById("userID").value;
-  var firstName = document.getElementById("firstName").value;
-  var lastName = document.getElementById("lastName").value;
-  var errorMsg = "";
-  
-  if (pwd === "" || cpwd === "") {
-    errorMsg = "ERROR: Missing Password";
-  } else if (pwd !== cpwd) {
-    errorMsg = "Passwords do not match.";
-  } else if (userId && pwd.toLowerCase().includes(userId.toLowerCase())) {
-    errorMsg = "Password should not contain your user ID.";
-  } else if ((firstName && pwd.toLowerCase().includes(firstName.toLowerCase())) ||
-             (lastName && pwd.toLowerCase().includes(lastName.toLowerCase()))) {
-    errorMsg = "Password should not contain your name.";
-  }
-  
-  document.getElementById("passwordError").textContent = errorMsg;
-}
+// ------------------------
+// Dynamic Validation Functions for Each Field
+// ------------------------
 
-// Function to check the form before submission.
-function checkForm() {
-  // Check if there's any dynamic password error message
-  var error = document.getElementById("passwordError").textContent;
-  if (error !== "") {
-    alert("Please fix the password error before submitting.");
+function validateFirstNameField() {
+  var firstName = document.getElementById("firstName").value.trim();
+  var errorSpan = document.getElementById("firstNameError");
+  var regex = /^[A-Za-z'\-]{1,30}$/;
+  if(firstName === ""){
+    errorSpan.textContent = "ERROR: Missing First Name";
     return false;
   }
+  if(!regex.test(firstName)){
+    errorSpan.textContent = "ERROR: Only letters, apostrophes, and dashes allowed";
+    return false;
+  }
+  errorSpan.textContent = "";
   return true;
+}
+
+function validateMiddleInitialField() {
+  var mi = document.getElementById("middleInitial").value.trim();
+  var errorSpan = document.getElementById("middleInitialError");
+  var regex = /^[A-Za-z]$/;
+  if(mi === ""){
+    errorSpan.textContent = "";
+    return true; // Optional
+  }
+  if(!regex.test(mi)){
+    errorSpan.textContent = "ERROR: Must be a single letter";
+    return false;
+  }
+  errorSpan.textContent = "";
+  return true;
+}
+
+function validateLastNameField() {
+  var lastName = document.getElementById("lastName").value.trim();
+  var errorSpan = document.getElementById("lastNameError");
+  var regex = /^[A-Za-z'\-]{1,30}$/;
+  if(lastName === ""){
+    errorSpan.textContent = "ERROR: Missing Last Name";
+    return false;
+  }
+  if(!regex.test(lastName)){
+    errorSpan.textContent = "ERROR: Only letters, apostrophes, and dashes allowed";
+    return false;
+  }
+  errorSpan.textContent = "";
+  return true;
+}
+
+function validateDOBField() {
+  var dob = document.getElementById("dob").value.trim();
+  var errorSpan = document.getElementById("dobError");
+  var result = validateDOB(dob);
+  errorSpan.textContent = (result === "pass") ? "" : result;
+  return result === "pass";
+}
+
+function validateSSNField() {
+  var ssn = document.getElementById("ssn").value.trim();
+  var errorSpan = document.getElementById("ssnError");
+  if(ssn === ""){
+    errorSpan.textContent = "ERROR: Missing Social Security";
+    return false;
+  }
+  var regex = /^\d{9,11}$/;
+  if(!regex.test(ssn)){
+    errorSpan.textContent = "ERROR: Must be 9 to 11 digits";
+    return false;
+  }
+  errorSpan.textContent = "";
+  return true;
+}
+
+function validateAddress1Field() {
+  var addr = document.getElementById("address1").value.trim();
+  var errorSpan = document.getElementById("address1Error");
+  if(addr === ""){
+    errorSpan.textContent = "ERROR: Missing Address";
+    return false;
+  }
+  if(addr.length < 2 || addr.length > 30){
+    errorSpan.textContent = "ERROR: Must be 2-30 characters";
+    return false;
+  }
+  errorSpan.textContent = "";
+  return true;
+}
+
+function validateCityField() {
+  var city = document.getElementById("city").value.trim();
+  var errorSpan = document.getElementById("cityError");
+  if(city === ""){
+    errorSpan.textContent = "ERROR: Missing City";
+    return false;
+  }
+  if(city.length < 2 || city.length > 30){
+    errorSpan.textContent = "ERROR: City must be 2-30 characters";
+    return false;
+  }
+  errorSpan.textContent = "";
+  return true;
+}
+
+function validateStateField() {
+  var state = document.getElementById("state").value.trim();
+  var errorSpan = document.getElementById("stateError");
+  if(state === ""){
+    errorSpan.textContent = "ERROR: Must select a state";
+    return false;
+  }
+  errorSpan.textContent = "";
+  return true;
+}
+
+function validateZipField() {
+  var zip = document.getElementById("zip").value.trim();
+  var errorSpan = document.getElementById("zipError");
+  if(zip === ""){
+    errorSpan.textContent = "ERROR: Missing Zip";
+    return false;
+  }
+  var regex = /^\d{5}(-\d{4})?$/;
+  if(!regex.test(zip)){
+    errorSpan.textContent = "ERROR: Invalid Zip format";
+    return false;
+  }
+  errorSpan.textContent = "";
+  return true;
+}
+
+function validateEmailField() {
+  var email = document.getElementById("email").value.trim();
+  var errorSpan = document.getElementById("emailError");
+  var result = validateEmail(email);
+  errorSpan.textContent = (result === "pass") ? "" : result;
+  return result === "pass";
+}
+
+function validatePhoneField() {
+  var phone = document.getElementById("phone").value.trim();
+  var errorSpan = document.getElementById("phoneError");
+  var result = validatePhone(phone);
+  errorSpan.textContent = (result === "pass") ? "" : result;
+  return result === "pass";
+}
+
+function validateUserIDField() {
+  var userID = document.getElementById("userID").value.trim();
+  var errorSpan = document.getElementById("userIDError");
+  var result = validateUserID(userID);
+  errorSpan.textContent = (result === "pass") ? "" : result;
+  return result === "pass";
+}
+
+// Function to check the entire form before submission.
+function checkForm() {
+  // Call every field's validation function
+  var valid = true;
+  valid = validateFirstNameField() && valid;
+  valid = validateMiddleInitialField() && valid;
+  valid = validateLastNameField() && valid;
+  valid = validateDOBField() && valid;
+  valid = validateSSNField() && valid;
+  valid = validateAddress1Field() && valid;
+  valid = validateCityField() && valid;
+  valid = validateStateField() && valid;
+  valid = validateZipField() && valid;
+  valid = validateEmailField() && valid;
+  valid = validatePhoneField() && valid;
+  valid = validateUserIDField() && valid;
+  
+  // Check password dynamically using our inline validation message
+  var pwdError = document.getElementById("passwordError").textContent;
+  if (pwdError !== "") {
+    alert("Please fix the password error before submitting.");
+    valid = false;
+  }
+  return valid;
 }
 
 // Function to review the form data and display it.
@@ -122,7 +271,7 @@ function reviewData() {
       zip = zip.substring(0, 5);
     }
     
-    // Validate required fields manually if empty
+    // Validate required fields manually if empty (using our helper functions)
     var nameStatus = (firstName === "" || lastName === "") ? "ERROR: Missing Name" : "pass";
     var dobStatus = (dob === "") ? "ERROR: Missing Date of Birth" : validateDOB(dob);
     var ssnStatus = (ssn === "") ? "ERROR: Missing Social Security" : "pass";
@@ -250,6 +399,7 @@ function reviewData() {
     // Scroll to the review section
     document.getElementById("reviewOutput").scrollIntoView({ behavior: "smooth" });
 }
+
 
 
 
