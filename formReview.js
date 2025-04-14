@@ -1,17 +1,17 @@
 // ------------------------
-// Cookie Functions for Remembering User's First Name
+// Cookie Functions for Remembering User's User ID
 // ------------------------
 function setCookie(name, value, days) {
   var d = new Date();
   d.setTime(d.getTime() + (days*24*60*60*1000));
-  var expires = "expires="+ d.toUTCString();
+  var expires = "expires=" + d.toUTCString();
   document.cookie = name + "=" + value + ";" + expires + ";path=/";
 }
 function getCookie(name) {
   var cname = name + "=";
   var decodedCookie = decodeURIComponent(document.cookie);
   var ca = decodedCookie.split(';');
-  for(var i = 0; i < ca.length; i++) {
+  for (var i = 0; i < ca.length; i++) {
     var c = ca[i].trim();
     if (c.indexOf(cname) === 0) {
       return c.substring(cname.length, c.length);
@@ -26,7 +26,7 @@ function eraseCookie(name) {
 function rememberUser() {
   if (document.getElementById("rememberMe").checked) {
     var userId = document.getElementById("userID").value.trim();
-    setCookie("userID", userId, 2); // Set cookie for 2 days (48 hours)
+    setCookie("userID", userId, 2); // Cookie expires in 2 days (48 hours)
   } else {
     eraseCookie("userID");
   }
@@ -46,6 +46,7 @@ function checkUserCookie() {
     notUserElem.style.display = "none";
   }
 }
+
 function resetUserCookie() {
   eraseCookie("userID");
   document.getElementById("userID").value = "";
@@ -94,7 +95,7 @@ function validateUserID(userID) {
   if (!userID || userID.trim() === "") {
     return "ERROR: Missing User ID";
   }
-  var regex = /^[A-Za-z][A-Za-z0-9_-]{4,19}$/;
+  var regex = /^[A-Za-z][A-Za-z0-9_\-]{4,19}$/;
   return regex.test(userID) ? "pass" : "ERROR: Invalid User ID format";
 }
 
@@ -105,7 +106,7 @@ function validatePasswordReview(pwd, cpwd) {
   if (pwd !== cpwd) {
     return "ERROR: Passwords do not match";
   }
-  var regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#%^&*()\-_+=\\/><.,`~])[A-Za-z\d!@#%^&*()\-_+=\\/><.,`~]{8,30}$/;
+  var regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#%^&*()_\-+=\\/><.,~])[A-Za-z\d!@#%^&*()_\-+=\\/><.,~]{8,30}$/;
   if (!regex.test(pwd)) {
     return "ERROR: Password must be 8-30 characters with at least one uppercase, one digit, and one special character";
   }
@@ -120,11 +121,11 @@ function validateFirstNameField() {
   var firstName = document.getElementById("firstName").value.trim();
   var errorSpan = document.getElementById("firstNameError");
   var regex = /^[A-Za-z'\-]{1,30}$/;
-  if(firstName === ""){
+  if (firstName === "") {
     errorSpan.textContent = "ERROR: Missing First Name";
     return false;
   }
-  if(!regex.test(firstName)){
+  if (!regex.test(firstName)) {
     errorSpan.textContent = "ERROR: Only letters, apostrophes, and dashes allowed";
     return false;
   }
@@ -136,11 +137,11 @@ function validateMiddleInitialField() {
   var mi = document.getElementById("middleInitial").value.trim();
   var errorSpan = document.getElementById("middleInitialError");
   var regex = /^[A-Za-z]$/;
-  if(mi === ""){
+  if (mi === "") {
     errorSpan.textContent = "";
     return true; // Optional
   }
-  if(!regex.test(mi)){
+  if (!regex.test(mi)) {
     errorSpan.textContent = "ERROR: Must be a single letter";
     return false;
   }
@@ -152,11 +153,11 @@ function validateLastNameField() {
   var lastName = document.getElementById("lastName").value.trim();
   var errorSpan = document.getElementById("lastNameError");
   var regex = /^[A-Za-z'\-]{1,30}$/;
-  if(lastName === ""){
+  if (lastName === "") {
     errorSpan.textContent = "ERROR: Missing Last Name";
     return false;
   }
-  if(!regex.test(lastName)){
+  if (!regex.test(lastName)) {
     errorSpan.textContent = "ERROR: Only letters, apostrophes, and dashes allowed";
     return false;
   }
@@ -175,13 +176,13 @@ function validateDOBField() {
 function validateSSNField() {
   var ssn = document.getElementById("ssn").value.trim();
   var errorSpan = document.getElementById("ssnError");
-  if(ssn === ""){
+  if (ssn === "") {
     errorSpan.textContent = "ERROR: Missing Social Security";
     return false;
   }
-  // Expect formatted SSN: XXX-XX-XXXX
+  // Expect formatted SSN: XXX-XX-6789
   var regex = /^\d{3}-\d{2}-\d{4}$/;
-  if(!regex.test(ssn)){
+  if (!regex.test(ssn)) {
     errorSpan.textContent = "ERROR: SSN must be formatted as 123-45-6789";
     return false;
   }
@@ -192,11 +193,11 @@ function validateSSNField() {
 function validateAddress1Field() {
   var addr = document.getElementById("address1").value.trim();
   var errorSpan = document.getElementById("address1Error");
-  if(addr === ""){
+  if (addr === "") {
     errorSpan.textContent = "ERROR: Missing Address";
     return false;
   }
-  if(addr.length < 2 || addr.length > 30){
+  if (addr.length < 2 || addr.length > 30) {
     errorSpan.textContent = "ERROR: Must be 2-30 characters";
     return false;
   }
@@ -207,11 +208,11 @@ function validateAddress1Field() {
 function validateAddress2Field() {
   var addr = document.getElementById("address2").value.trim();
   var errorSpan = document.getElementById("address2Error");
-  if(addr === ""){
+  if (addr === "") {
     errorSpan.textContent = "";
     return true; // Optional field
   }
-  if(addr.length < 2 || addr.length > 30){
+  if (addr.length < 2 || addr.length > 30) {
     errorSpan.textContent = "ERROR: Must be 2-30 characters";
     return false;
   }
@@ -222,11 +223,11 @@ function validateAddress2Field() {
 function validateCityField() {
   var city = document.getElementById("city").value.trim();
   var errorSpan = document.getElementById("cityError");
-  if(city === ""){
+  if (city === "") {
     errorSpan.textContent = "ERROR: Missing City";
     return false;
   }
-  if(city.length < 2 || city.length > 30){
+  if (city.length < 2 || city.length > 30) {
     errorSpan.textContent = "ERROR: City must be 2-30 characters";
     return false;
   }
@@ -237,7 +238,7 @@ function validateCityField() {
 function validateStateField() {
   var state = document.getElementById("state").value.trim();
   var errorSpan = document.getElementById("stateError");
-  if(state === ""){
+  if (state === "") {
     errorSpan.textContent = "ERROR: Must select a state";
     return false;
   }
@@ -248,12 +249,12 @@ function validateStateField() {
 function validateZipField() {
   var zip = document.getElementById("zip").value.trim();
   var errorSpan = document.getElementById("zipError");
-  if(zip === ""){
+  if (zip === "") {
     errorSpan.textContent = "ERROR: Missing Zip";
     return false;
   }
   var regex = /^\d{5}(-\d{4})?$/;
-  if(!regex.test(zip)){
+  if (!regex.test(zip)) {
     errorSpan.textContent = "ERROR: Invalid Zip format";
     return false;
   }
@@ -321,6 +322,31 @@ function autoFormatPhone() {
 }
 
 // ------------------------
+// Password Validation Function (oninput)
+// ------------------------
+function validatePassword() {
+  var pwd = document.getElementById("password").value;
+  var cpwd = document.getElementById("confirmPassword").value;
+  var userId = document.getElementById("userID").value;
+  var firstName = document.getElementById("firstName").value;
+  var lastName = document.getElementById("lastName").value;
+  var errorMsg = "";
+  
+  if (pwd === "" || cpwd === "") {
+    errorMsg = "ERROR: Missing Password";
+  } else if (pwd !== cpwd) {
+    errorMsg = "Passwords do not match.";
+  } else if (userId && pwd.toLowerCase().includes(userId.toLowerCase())) {
+    errorMsg = "Password should not contain your user ID.";
+  } else if ((firstName && pwd.toLowerCase().includes(firstName.toLowerCase())) ||
+             (lastName && pwd.toLowerCase().includes(lastName.toLowerCase()))) {
+    errorMsg = "Password should not contain your name.";
+  }
+  
+  document.getElementById("passwordError").textContent = errorMsg;
+}
+
+// ------------------------
 // Form and Review Functions
 // ------------------------
 
@@ -344,7 +370,6 @@ function checkForm() {
   var confirmPassword = document.getElementById("confirmPassword").value;
   var pwdStatus = validatePasswordReview(password, confirmPassword);
   if (pwdStatus !== "pass") {
-    // Set the error message in the dedicated span and alert the user
     document.getElementById("passwordError").textContent = pwdStatus;
     alert("Please fix the password error before submitting.");
     valid = false;
@@ -436,7 +461,7 @@ function reviewData() {
       }
     }
     
-    // Build review table
+    // Build review table with Field, Value, and Status columns
     var reviewHTML = "<h3>PLEASE REVIEW THIS INFORMATION</h3>";
     reviewHTML += "<table border='1' cellpadding='5' cellspacing='0'>";
     reviewHTML += "<tr><td><strong>Name</strong></td><td>" + (firstName + " " + middleInitial + " " + lastName) + "</td><td>" +
@@ -474,8 +499,13 @@ function reviewData() {
     document.getElementById("reviewOutput").scrollIntoView({ behavior: "smooth" });
 }
 
-
-
-
-
-
+// ------------------------
+// Helper Function: Validate SSN (used by reviewData)
+// ------------------------
+function validateSSN(ssn) {
+  if (!ssn || ssn.trim() === "") {
+    return "ERROR: Missing Social Security";
+  }
+  var regex = /^\d{3}-\d{2}-\d{4}$/;
+  return regex.test(ssn) ? "pass" : "ERROR: SSN must be formatted as 123-45-6789";
+}
