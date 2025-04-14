@@ -9,8 +9,11 @@
                  inline error messages are shown (or removed if corrected). Only when all
                  validations pass is the Submit button allowed to submit the form.
                  Enhancements:
-                   - SSN field auto-formats as you type (e.g., 123-45-6789)
-                   - User ID maximum length is now 20 characters.
+                   - SSN field auto-formats as you type (e.g., 123-45-6789).
+                   - Phone number auto-formats as you type (e.g., 000-000-0000).
+                   - User ID maximum length limited to 20 characters.
+                   - An iFrame has been added to display external content.
+                   - The footer is fixed and the header is personalized using cookies.
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -34,16 +37,26 @@
     }
   </script>
 
-  <!-- Link to external JS for validation and review functionality -->
+  <!-- Link to external JS for validation, cookies, and review functionality -->
   <script src="formReview.js"></script>
 </head>
-<body onload="showCurrentDate()">
+<body onload="showCurrentDate(); checkUserCookie();">
 
   <!-- HEADER/BANNER SECTION -->
   <div class="header-banner">
     <img src="magicalmedicalcenter.jpg" alt="Company Logo" width="50" height="50">
     <h1>Magical Medical Center</h1>
+    <!-- Dynamic greeting based on cookie -->
+    <p id="welcomeMessage"></p>
+    <!-- Dynamic option to reset cookie if not the current user -->
+    <p id="notUser" style="display:none; cursor:pointer;" onclick="resetUserCookie()"></p>
     <p>Today is: <span id="currentDate"></span></p>
+  </div>
+
+  <!-- iFrame Example -->
+  <div id="iframeSection" style="margin: 10px 0;">
+    <!-- Example external content (clickable) -->
+    <iframe src="https://www.example.com" width="100%" height="100" title="External Resource"></iframe>
   </div>
 
   <hr>
@@ -53,7 +66,7 @@
   <div class="main-section">
     <h2>Patient Registration Form</h2>
     
-    <form action="thankyou.html" onsubmit="return checkForm();">
+    <form action="thankyou.html" onsubmit="if(checkForm()){ rememberUser(); return true; } else { return false; }">
       <table>
         <!-- Block/Area 1: Name and Date of Birth -->
         <tr>
@@ -93,7 +106,7 @@
           </td>
           <td><label for="ssn">Social Security #:</label></td>
           <td>
-            <!-- Changed type to "text" for auto-formatting; oninput calls autoFormatSSN() -->
+            <!-- Changed type to "text" for auto-formatting -->
             <input type="text" id="ssn" name="ssn" maxlength="11" 
                    placeholder="123456789" 
                    title="Enter 9 digits. Auto-formats as 123-45-6789" 
@@ -216,14 +229,14 @@
         </tr>
         <tr>
           <td><label for="phone">Phone Number:</label></td>
-            <td colspan="5">
-                <input type="tel" id="phone" name="phone" 
-                    pattern="^\d{3}-\d{3}-\d{4}$" 
-                    placeholder="000-000-0000" 
-                    title="Enter phone number as 000-000-0000" 
-                    required oninput="autoFormatPhone()" onblur="validatePhoneField()">
-                <span id="phoneError" class="error"></span>
-            </td>
+          <td colspan="5">
+            <input type="tel" id="phone" name="phone" 
+                   pattern="^\d{3}-\d{3}-\d{4}$" 
+                   placeholder="000-000-0000" 
+                   title="Enter phone number as 000-000-0000" 
+                   required oninput="autoFormatPhone()" onblur="validatePhoneField()">
+            <span id="phoneError" class="error"></span>
+          </td>
         </tr>
 
         <!-- Block/Area 4: Additional Choices -->
@@ -304,12 +317,18 @@
         <tr>
           <td><label for="userID">Desired User ID:</label></td>
           <td colspan="5">
-            <!-- Updated pattern: max 20 characters -->
             <input type="text" id="userID" name="userID" 
                    pattern="^[A-Za-z][A-Za-z0-9_-]{4,19}$" 
                    title="5-20 characters: must start with a letter, no spaces, only letters, numbers, underscore or dash" 
                    required onblur="validateUserIDField()">
             <span id="userIDError" class="error"></span>
+          </td>
+        </tr>
+        <!-- Remember Me Checkbox -->
+        <tr>
+          <td colspan="6">
+            <input type="checkbox" id="rememberMe" name="rememberMe" checked>
+            <label for="rememberMe">Remember Me</label>
           </td>
         </tr>
         <!-- Password and Confirm Password -->
@@ -351,7 +370,7 @@
 
   <hr>
 
-  <!-- FOOTER SECTION -->
+  <!-- FOOTER SECTION: Fixed positioning added in style.css -->
   <div class="footer-section">
     <p>
       Magical Medical Center | 
