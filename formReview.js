@@ -23,23 +23,32 @@ function eraseCookie(name) {
   setCookie(name, "", -1);
 }
 
+function rememberUser() {
+  if (document.getElementById("rememberMe").checked) {
+    var userId = document.getElementById("userID").value.trim();
+    setCookie("userID", userId, 2); // Set cookie for 2 days (48 hours)
+  } else {
+    eraseCookie("userID");
+  }
+}
+
 function checkUserCookie() {
-  var fname = getCookie("firstName");
+  var uid = getCookie("userID");
   var welcomeMessage = document.getElementById("welcomeMessage");
   var notUserElem = document.getElementById("notUser");
-  if(fname !== "") {
-    welcomeMessage.textContent = "Welcome back, " + fname;
-    document.getElementById("firstName").value = fname;
+  if (uid !== "") {
+    welcomeMessage.textContent = "Welcome back, " + uid;
+    document.getElementById("userID").value = uid;
     notUserElem.style.display = "block";
-    notUserElem.textContent = "Not " + fname + "? Click here to start as a new user.";
+    notUserElem.textContent = "Not " + uid + "? Click here to start as a new user.";
   } else {
     welcomeMessage.textContent = "Hello New User";
     notUserElem.style.display = "none";
   }
 }
 function resetUserCookie() {
-  eraseCookie("firstName");
-  document.getElementById("firstName").value = "";
+  eraseCookie("userID");
+  document.getElementById("userID").value = "";
   checkUserCookie();
   document.forms[0].reset();
 }
@@ -330,9 +339,13 @@ function checkForm() {
   valid = validatePhoneField() && valid;
   valid = validateUserIDField() && valid;
   
-  // Check password dynamically using our inline validation message
-  var pwdError = document.getElementById("passwordError").textContent;
-  if (pwdError !== "") {
+  // Explicitly validate the password fields
+  var password = document.getElementById("password").value;
+  var confirmPassword = document.getElementById("confirmPassword").value;
+  var pwdStatus = validatePasswordReview(password, confirmPassword);
+  if (pwdStatus !== "pass") {
+    // Set the error message in the dedicated span and alert the user
+    document.getElementById("passwordError").textContent = pwdStatus;
     alert("Please fix the password error before submitting.");
     valid = false;
   }
