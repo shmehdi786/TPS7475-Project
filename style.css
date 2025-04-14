@@ -3,8 +3,9 @@
   Author: Hijab Mehdi
   Date created: 02/08/2025
   Date edited: 02/10/2025
-  Version: 1.0
-  Description: External CSS for patient registration form.
+  Version: 1.1
+  Description: External CSS for patient registration form with enhancements for a sticky header,
+               fixed footer, and adjustments to accommodate these changes.
 */
 
 /* Basic page (body) styling */
@@ -13,14 +14,15 @@ body {
     font-family: Verdana, Arial, sans-serif;
     color: #333;
     margin: 20px;
+    padding-bottom: 100px;  /* Extra padding to ensure content is not hidden by fixed footer */
 }
-  
+
 /* Heading styles */
 h1, h2 {
     font-family: "Trebuchet MS", sans-serif;
     color: #006699;
 }
-  
+
 /* Hyperlinks (unvisited, visited) */
 a {
     color: #006699;
@@ -32,21 +34,30 @@ a:visited {
 a:hover {
     text-decoration: underline;
 }
-  
-/* Header banner section */
+
+/* Header banner section (Sticky header) */
 .header-banner {
     background-color: #cceeff;
     padding: 10px;
     display: flex;
     align-items: center;
     gap: 15px;
+    position: sticky; /* Sticks to the top when scrolling */
+    top: 0;
+    z-index: 1000;
 }
-  
+
+/* iFrame Section styling (optional, for spacing) */
+#iframeSection {
+    margin: 10px 0;
+    /* You can adjust width/height as needed */
+}
+
 /* Main form section */
 .main-section {
     margin: 20px 0;
 }
-  
+
 /* Table styling for the form */
 table {
     border-collapse: collapse;
@@ -57,11 +68,20 @@ table td {
     padding: 8px;
     vertical-align: top;
 }
-  
-/* Footer section */
+
+/* Error message styling */
+.error {
+    color: red;
+    font-size: 0.9em;
+}
+
+/* Footer section (Fixed Footer) */
 .footer-section {
+    position: fixed; /* Fixed positioning */
+    bottom: 0;
+    left: 0;
+    right: 0;
     background-color: #eee;
     padding: 10px;
     text-align: center;
-    margin-top: 20px;
 }
