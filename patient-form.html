@@ -41,7 +41,6 @@
   <script src="formReview.js"></script>
 </head>
 <body onload="showCurrentDate(); checkUserCookie();">
-
   <!-- HEADER/BANNER SECTION -->
   <div class="header-banner">
     <img src="magicalmedicalcenter.jpg" alt="Company Logo" width="50" height="50">
@@ -62,7 +61,7 @@
   <hr>
 
   <!-- MAIN FORM SECTION -->
-  <!-- The form onsubmit calls checkForm() to prevent submission if errors exist -->
+  <!-- The form onsubmit calls checkForm() and rememberUser() if valid -->
   <div class="main-section">
     <h2>Patient Registration Form</h2>
     
@@ -318,7 +317,7 @@
           <td><label for="userID">Desired User ID:</label></td>
           <td colspan="5">
             <input type="text" id="userID" name="userID" 
-                   pattern="^[A-Za-z][A-Za-z0-9_-]{4,19}$" 
+                   pattern="^[A-Za-z][A-Za-z0-9_\-]{4,19}$" 
                    title="5-20 characters: must start with a letter, no spaces, only letters, numbers, underscore or dash" 
                    required onblur="validateUserIDField()">
             <span id="userIDError" class="error"></span>
@@ -336,7 +335,7 @@
           <td><label for="password">Password:</label></td>
           <td colspan="5">
             <input type="password" id="password" name="password" 
-                   pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#%^&*()\-_+=\\/><.,`~])[A-Za-z\d!@#%^&*()\-_+=\\/><.,`~]{8,30}" 
+                   pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#%^&*()_\-+=\\/><.,~])[A-Za-z\d!@#%^&*()_\-+=\\/><.,~]{8,30}" 
                    title="8-30 characters; must include at least one uppercase letter, one digit, and one special character (no quotes)" 
                    required oninput="validatePassword()">
           </td>
@@ -385,6 +384,3 @@
 
 </body>
 </html>
-
-
-
